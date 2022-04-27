@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.1.0](https://github.com/ChainSafe/node-snappy-stream/compare/v5.0.3...v5.1.0) (2022-04-27)
+
+
+### Features
+
+* add async chunk compress ([#6](https://github.com/ChainSafe/node-snappy-stream/issues/6)) ([29d3780](https://github.com/ChainSafe/node-snappy-stream/commit/29d378012bc7a1e612e3c8c5b9cef32b5cb6c04f))
+
 ### [5.0.3](https://github.com/ChainSafe/node-snappy-stream/compare/v5.0.2...v5.0.3) (2022-04-27)
 
 
