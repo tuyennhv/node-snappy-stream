@@ -5,7 +5,7 @@ module.exports = {
     createUncompressStream: function (opts) {
       return new UncompressStream(opts)
     }
-  , createCompressStream: function () {
-      return new CompressStream()
+  , createCompressStream: function (opts) {
+      return new CompressStream(opts)
     }
 }
