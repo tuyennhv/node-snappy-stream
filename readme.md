@@ -1,15 +1,16 @@
-# snappy-stream[![build status](https://secure.travis-ci.org/kesla/node-snappy-stream.svg)](http://travis-ci.org/kesla/node-snappy-stream)
+# snappy-stream[![Node.js CI/CD](https://github.com/ChainSafe/node-snappy-stream/actions/workflows/main.yaml/badge.svg?branch=master&event=push)](https://github.com/ChainSafe/node-snappy-stream/actions/workflows/main.yaml)
 
 Compress data over a Stream using the snappy framing format
 
-[![NPM](https://nodei.co/npm/snappy-stream.png?downloads&stars)](https://nodei.co/npm/snappy-stream/)
+[![Npm package version](https://badgen.net/npm/v/@chainsafe/snappy-stream)](https://npmjs.com/package/@chainsafe/snappy-stream)
+[![Npm package monthly downloads](https://badgen.net/npm/dm/@chainsafe/snappy-stream)](https://npmjs.ccom/package/@chainsafe/snappy-stream)
+[![Npm package license](https://badgen.net/npm/license/@chainsafe/snappy-stream)](https://npmjs.com/package/@chainsafe/snappy-stream)
 
-[![NPM](https://nodei.co/npm-dl/snappy-stream.png)](https://nodei.co/npm/snappy-stream/)
 
 ## Installation
 
 ```
-npm install snappy-stream
+npm install @chainsafe/snappy-stream
 ```
 
 ## Benchmark
