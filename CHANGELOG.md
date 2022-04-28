@@ -1,5 +1,12 @@
 # Changelog
 
+### [5.1.1](https://github.com/ChainSafe/node-snappy-stream/compare/v5.1.0...v5.1.1) (2022-04-28)
+
+
+### Bug Fixes
+
+* Fix self reference ([#11](https://github.com/ChainSafe/node-snappy-stream/issues/11)) ([2b11904](https://github.com/ChainSafe/node-snappy-stream/commit/2b119040d9c6fcdaf94c504deb3e6a839f6251ba))
+
 ## [5.1.0](https://github.com/ChainSafe/node-snappy-stream/compare/v5.0.3...v5.1.0) (2022-04-27)
 
 
