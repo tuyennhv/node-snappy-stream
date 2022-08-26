@@ -159,7 +159,6 @@ it('uncompress small Buffer across multiple chunks', function () {
 
   uncompressStream.on('end', function () {
     expect(Buffer.concat(data)).to.be.deep.equal(bufferFrom('beep boop'))
-    t.end()
   })
 
   // identifier
