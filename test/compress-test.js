@@ -12,38 +12,29 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
 [{
   testName: "small",
   testString: "beep boop",
-  asyncCompress: true
 }, {
   testName: "small",
   testString: "beep boop",
-  asyncCompress: false
 }, {
   testName: "large",
   testString: largerInput,
-  asyncCompress: true
 }, {
   testName: "large",
   testString: largerInput,
-  asyncCompress: false
 }, {
   testName: "super large",
   testString: superLargeInput,
-  asyncCompress: true
 }, {
   testName: "super large",
   testString: superLargeInput,
-  asyncCompress: false
 }].forEach(({
   testName,
   testString,
-  asyncCompress
 }) => {
 
-  it(`compress ${testName} input - asyncCompress=${asyncCompress}`, function() {
+  it(`compress ${testName} input`, function() {
     const child = spawn('python', ['-m', 'snappy', '-d']),
-      compressStream = createCompressStream({
-        asyncCompress
-      })
+      compressStream = createCompressStream()
     let data = ''
 
     child.stdout.on('data', function(chunk) {
