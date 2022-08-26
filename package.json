@@ -27,7 +27,7 @@
     "buffer-equal": "1.0.0",
     "buffer-from": "^1.1.1",
     "@chainsafe/fast-crc32c": "3.0.0",
-    "snappy": "^6.3.5"
+    "snappyjs": "^0.7.0"
   },
   "directories": {
     "test": "test"
