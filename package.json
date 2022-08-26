@@ -4,7 +4,7 @@
   "description": "Compress data over a Stream using the snappy framing format",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/*-test.js"
+    "test": "mocha test/*-test.js"
   },
   "keywords": [
     "snappy",
@@ -18,7 +18,8 @@
   "license": "MIT",
   "devDependencies": {
     "async-benchmark": "^1.0.0",
-    "tap": "^11.0.1"
+    "mocha": "^8.0.0",
+    "chai": "4.3.6"
   },
   "dependencies": {
     "bl": "^1.0.0",

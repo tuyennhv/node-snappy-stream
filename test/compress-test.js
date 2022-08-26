@@ -1,6 +1,6 @@
 const spawn = require('child_process').spawn,
   createCompressStream = require('../').createCompressStream,
-  test = require('tap').test,
+  expect = require('chai').expect,
   largerInput = require('fs').readFileSync(__filename)
 
 const UNCOMPRESSED_CHUNK_SIZE = 65536
@@ -39,7 +39,7 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
   asyncCompress
 }) => {
 
-  test(`compress ${testName} input - asyncCompress=${asyncCompress}`, function(t) {
+  it(`compress ${testName} input - asyncCompress=${asyncCompress}`, function() {
     const child = spawn('python', ['-m', 'snappy', '-d']),
       compressStream = createCompressStream({
         asyncCompress
@@ -51,8 +51,7 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
     })
 
     child.stdout.on('end', function() {
-      t.equal(data, testString.toString())
-      t.end()
+      expect(data).to.be.equal(testString.toString())
     })
 
     child.stderr.pipe(process.stderr)

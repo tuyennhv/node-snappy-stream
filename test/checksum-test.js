@@ -1,7 +1,7 @@
 var checksum = require("../lib/checksum");
 var fs = require("fs");
 var join = require("path").join;
-var test = require("tap").test;
+var expect = require('chai').expect;
 var bufferAlloc = require('buffer-alloc')
 
 function bufferToArray(buffer) {
@@ -33,12 +33,11 @@ var expectedRows = JSON.parse(
   fs.readFileSync(join(__dirname, "checksum.expected"))
 );
 
-test("Checksum", function (t) {
+it("Checksum", function () {
   expectedRows.forEach(function (expected, index) {
     var buffer = bufferAlloc(1);
     buffer[0] = index;
     var actual = bufferToArray(checksum(buffer));
-    t.deepEqual(actual, expected, 'Buffer created from ' + index);
+    expect(actual).to.be.deep.equal(expected, 'Buffer created from ' + index)
   });
-  t.end();
 });

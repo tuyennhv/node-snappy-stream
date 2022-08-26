@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [10.x, 12.x, 14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn test
-  
+
   maybe-release:
     name: release
     runs-on: ubuntu-latest
@@ -40,18 +40,18 @@ jobs:
           release-type: node
           package-name: release-please-action
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
-      
+
       - uses: actions/checkout@v3
         # these if statements ensure that a publication only occurs when
         # a new release is created:
         if: ${{ steps.release.outputs.release_created }}
-        
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs.release_created }}
-      
+
       - run: yarn install
         if: ${{ steps.release.outputs.release_created }}
 

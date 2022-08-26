@@ -1,25 +1,24 @@
 var spawn = require('child_process').spawn
 
   , createUncompressStream = require('../').createUncompressStream
-  , test = require('tap').test
+  , expect = require('chai').expect
   , bufferFrom = require('buffer-from')
 
   , largerInput = require('fs').readFileSync(__filename)
   , largerInputString = largerInput.toString()
 
-test('uncompress small string', function (t) {
+it('uncompress small string', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream({ asBuffer: false })
     , data = ''
 
   uncompressStream.on('data', function (chunk) {
     data = data + chunk
-    t.equal(typeof(chunk), 'string')
+    expect(typeof(chunk)).to.be.equal('string')
   })
 
   uncompressStream.on('end', function () {
-    t.equal(data, 'beep boop')
-    t.end()
+    expect(data).to.be.equal('beep boop')
   })
 
   child.stdout.pipe(uncompressStream)
@@ -28,19 +27,18 @@ test('uncompress small string', function (t) {
   child.stdin.end()
 })
 
-test('uncompress small Buffer', function (t) {
+it('uncompress small Buffer', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream()
     , data = []
 
   uncompressStream.on('data', function (chunk) {
     data.push(chunk)
-    t.ok(Buffer.isBuffer(chunk))
+    expect(Buffer.isBuffer(chunk)).to.be.true
   })
 
   uncompressStream.on('end', function () {
-    t.deepEqual(Buffer.concat(data), bufferFrom('beep boop'))
-    t.end()
+    expect(Buffer.concat(data)).to.be.deep.equal(bufferFrom('beep boop'))
   })
 
   child.stdout.pipe(uncompressStream)
@@ -49,19 +47,18 @@ test('uncompress small Buffer', function (t) {
   child.stdin.end()
 })
 
-test('uncompress large string', function (t) {
+it('uncompress large string', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream({ asBuffer: false })
     , data = ''
 
   uncompressStream.on('data', function (chunk) {
     data = data + chunk
-    t.equal(typeof(chunk), 'string')
+    expect(typeof(chunk)).to.be.equal('string')
   })
 
   uncompressStream.on('end', function () {
-    t.equal(data, largerInputString)
-    t.end()
+    expect(data).to.be.equal(largerInputString)
   })
 
   child.stdout.pipe(uncompressStream)
@@ -70,19 +67,18 @@ test('uncompress large string', function (t) {
   child.stdin.end()
 })
 
-test('uncompress large string', function (t) {
+it('uncompress large string', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream()
     , data = []
 
     uncompressStream.on('data', function (chunk) {
       data.push(chunk)
-      t.ok(Buffer.isBuffer(chunk))
+      expect(Buffer.isBuffer(chunk)).to.be.true
     })
 
     uncompressStream.on('end', function () {
-      t.deepEqual(Buffer.concat(data), largerInput)
-      t.end()
+      expect(Buffer.concat(data)).to.be.deep.equal(largerInput)
     })
 
 
@@ -92,12 +88,11 @@ test('uncompress large string', function (t) {
   child.stdin.end()
 })
 
-test('uncompress with bad identifier', function (t) {
+it('uncompress with bad identifier', function () {
   var uncompressStream = createUncompressStream()
 
   uncompressStream.on('error', function (err) {
-    t.equal(err.message, 'malformed input: bad identifier')
-    t.end()
+    expect(err.message).to.be.equal('malformed input: bad identifier')
   })
 
   uncompressStream.write(
@@ -106,12 +101,11 @@ test('uncompress with bad identifier', function (t) {
   uncompressStream.end()
 })
 
-test('uncompress with bad first frame', function (t) {
+it('uncompress with bad first frame', function () {
   var uncompressStream = createUncompressStream()
 
   uncompressStream.on('error', function (err) {
-    t.equal(err.message, 'malformed input: must begin with an identifier')
-    t.end()
+    expect(err.message).to.be.equal('malformed input: must begin with an identifier')
   })
 
   uncompressStream.write(
@@ -120,19 +114,18 @@ test('uncompress with bad first frame', function (t) {
   uncompressStream.end()
 })
 
-test('uncompress large String in small pieces', function (t) {
+it('uncompress large String in small pieces', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream()
     , data = []
 
     uncompressStream.on('data', function (chunk) {
       data.push(chunk)
-      t.ok(Buffer.isBuffer(chunk))
+      expect(Buffer.isBuffer(chunk)).to.be.true
     })
 
     uncompressStream.on('end', function () {
-      t.deepEqual(Buffer.concat(data), largerInput)
-      t.end()
+      expect(Buffer.concat(data)).to.be.deep.equal(largerInput)
     })
 
   child.stdout.on('data', function (chunk) {
@@ -152,7 +145,7 @@ test('uncompress large String in small pieces', function (t) {
   child.stdin.end()
 })
 
-test('uncompress small Buffer across multiple chunks', function (t) {
+it('uncompress small Buffer across multiple chunks', function () {
   var uncompressStream = createUncompressStream()
     , data = []
     , IDENTIFIER = bufferFrom([
@@ -161,11 +154,11 @@ test('uncompress small Buffer across multiple chunks', function (t) {
 
   uncompressStream.on('data', function (chunk) {
     data.push(chunk)
-    t.ok(Buffer.isBuffer(chunk))
+    expect(Buffer.isBuffer(chunk)).to.be.true
   })
 
   uncompressStream.on('end', function () {
-    t.deepEqual(Buffer.concat(data), bufferFrom('beep boop'))
+    expect(Buffer.concat(data)).to.be.deep.equal(bufferFrom('beep boop'))
     t.end()
   })
 
@@ -178,7 +171,7 @@ test('uncompress small Buffer across multiple chunks', function (t) {
   uncompressStream.end()
 })
 
-test('uncompress large string across multiple chunks', function (t) {
+it('uncompress large string across multiple chunks', function () {
   var child1 = spawn('python', [ '-m', 'snappy', '-c' ])
     , IDENTIFIER = bufferFrom([
         0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59
@@ -188,12 +181,11 @@ test('uncompress large string across multiple chunks', function (t) {
 
   uncompressStream.on('data', function (chunk) {
     data = data + chunk
-    t.equal(typeof(chunk), 'string')
+    expect(typeof(chunk)).to.be.equal('string')
   })
 
   uncompressStream.on('end', function () {
-    t.equal(data, largerInputString + largerInputString)
-    t.end()
+    expect(data).to.be.equal(largerInputString + largerInputString)
   })
 
   // manually pipe processes in so we can remove identifiers
@@ -207,7 +199,7 @@ test('uncompress large string across multiple chunks', function (t) {
     child2.stdout.on('data', function(chunk) {
       uncompressStream.write(chunk.slice(10))
       uncompressStream.end()
-    })  
+    })
 
     // trigger second write after first write
     child2.stdin.write(largerInput)
@@ -221,7 +213,7 @@ test('uncompress large string across multiple chunks', function (t) {
   child1.stdin.end()
 })
 
-test('uncompress large string with padding chunks', function (t) {
+it('uncompress large string with padding chunks', function () {
   var child1 = spawn('python', [ '-m', 'snappy', '-c' ])
     , IDENTIFIER = bufferFrom([
         0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59
@@ -231,12 +223,11 @@ test('uncompress large string with padding chunks', function (t) {
 
   uncompressStream.on('data', function (chunk) {
     data = data + chunk
-    t.equal(typeof(chunk), 'string')
+    expect(typeof(chunk)).to.be.equal('string')
   })
 
   uncompressStream.on('end', function () {
-    t.equal(data, largerInputString + largerInputString)
-    t.end()
+    expect(data).to.be.equal(largerInputString + largerInputString)
   })
 
   // manually pipe processes in so we can remove identifiers
@@ -253,7 +244,7 @@ test('uncompress large string with padding chunks', function (t) {
       uncompressStream.write(chunk.slice(10))
       uncompressStream.end()
     })
-  
+
       // trigger second write after first write
       child2.stdin.write(largerInput)
       child2.stdin.end()
