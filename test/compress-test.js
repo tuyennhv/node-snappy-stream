@@ -36,7 +36,7 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
   testString,
 }) => {
 
-  it(`compress ${testName} input`, function() {
+  it(`compress ${testName} input`, function(done) {
     const child = spawn('python', ['-m', 'snappy', '-d']),
       compressStream = createCompressStream()
     let data = ''
@@ -47,6 +47,7 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
 
     child.stdout.on('end', function() {
       expect(data).to.be.equal(testString.toString())
+      done()
     })
 
     child.stderr.pipe(process.stderr)
