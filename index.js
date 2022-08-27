@@ -1,11 +1,10 @@
-var CompressStream = require('./lib/compress-stream')
-  , UncompressStream = require('./lib/uncompress-stream')
+import {CompressStream} from './lib/compress-stream.js'
+import {UncompressStream} from './lib/uncompress-stream.js'
 
-module.exports = {
-    createUncompressStream: function (opts) {
-      return new UncompressStream(opts)
-    }
-  , createCompressStream: function (opts) {
-      return new CompressStream(opts)
-    }
+export function createUncompressStream(opts) {
+  return new UncompressStream(opts)
+}
+
+export function createCompressStream(opts) {
+  return new CompressStream(opts)
 }

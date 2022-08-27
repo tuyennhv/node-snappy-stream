@@ -2,9 +2,13 @@
   "name": "@chainsafe/snappy-stream",
   "version": "5.1.1",
   "description": "Compress data over a Stream using the snappy framing format",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./index.js",
   "scripts": {
     "test": "mocha test/*-test.js"
+  },
+  "engines": {
+    "node": ">=14.13.1"
   },
   "keywords": [
     "snappy",
@@ -22,10 +26,7 @@
     "chai": "4.3.6"
   },
   "dependencies": {
-    "bl": "^1.0.0",
-    "buffer-alloc": "^1.2.0",
-    "buffer-equal": "1.0.0",
-    "buffer-from": "^1.1.1",
+    "bl": "^4.0.1",
     "@chainsafe/fast-crc32c": "3.0.0",
     "snappyjs": "^0.7.0"
   },

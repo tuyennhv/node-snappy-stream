@@ -1,7 +1,11 @@
-const spawn = require('child_process').spawn,
-  createCompressStream = require('../').createCompressStream,
-  expect = require('chai').expect,
-  largerInput = require('fs').readFileSync(__filename)
+import {spawn} from 'child_process'
+import {expect} from 'chai'
+import fs from 'fs'
+import {fileURLToPath} from 'url'
+import {createCompressStream} from '../index.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const largerInput = fs.readFileSync(__filename)
 
 const UNCOMPRESSED_CHUNK_SIZE = 65536
 let superLargeInput = largerInput;
@@ -10,22 +14,22 @@ for (let i = largerInput.length; i <= UNCOMPRESSED_CHUNK_SIZE; i += largerInput.
 }
 
 [{
-  testName: "small",
-  testString: "beep boop",
+  testName: 'small',
+  testString: 'beep boop',
 }, {
-  testName: "small",
-  testString: "beep boop",
+  testName: 'small',
+  testString: 'beep boop',
 }, {
-  testName: "large",
+  testName: 'large',
   testString: largerInput,
 }, {
-  testName: "large",
+  testName: 'large',
   testString: largerInput,
 }, {
-  testName: "super large",
+  testName: 'super large',
   testString: superLargeInput,
 }, {
-  testName: "super large",
+  testName: 'super large',
   testString: superLargeInput,
 }].forEach(({
   testName,

@@ -1,13 +1,14 @@
-var spawn = require('child_process').spawn
+import fs from 'fs'
+import {spawn} from 'child_process'
+import {createUncompressStream} from '../index.js'
+import {fileURLToPath} from 'url'
+import {expect} from 'chai'
 
-  , createUncompressStream = require('../').createUncompressStream
-  , expect = require('chai').expect
-  , bufferFrom = require('buffer-from')
+const __filename = fileURLToPath(import.meta.url)
+const largerInput = fs.readFileSync(__filename)
+const largerInputString = largerInput.toString()
 
-  , largerInput = require('fs').readFileSync(__filename)
-  , largerInputString = largerInput.toString()
-
-it.skip('uncompress small string', function () {
+it('uncompress small string', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream({ asBuffer: false })
     , data = ''
@@ -38,16 +39,16 @@ it('uncompress small Buffer', function () {
   })
 
   uncompressStream.on('end', function () {
-    expect(Buffer.concat(data)).to.be.deep.equal(bufferFrom('beep boop'))
+    expect(Buffer.concat(data)).to.be.deep.equal(Buffer.from('beep boop'))
   })
 
   child.stdout.pipe(uncompressStream)
 
-  child.stdin.write(bufferFrom('beep boop'))
+  child.stdin.write(Buffer.from('beep boop'))
   child.stdin.end()
 })
 
-it.skip('uncompress large string', function () {
+it('uncompress large string', function () {
   var child = spawn('python', [ '-m', 'snappy', '-c' ])
     , uncompressStream = createUncompressStream({ asBuffer: false })
     , data = ''
@@ -96,7 +97,7 @@ it('uncompress with bad identifier', function () {
   })
 
   uncompressStream.write(
-    bufferFrom([ 0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x60 ])
+    Buffer.from([ 0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x60 ])
   )
   uncompressStream.end()
 })
@@ -109,7 +110,7 @@ it('uncompress with bad first frame', function () {
   })
 
   uncompressStream.write(
-    bufferFrom([ 0x0, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x60 ])
+    Buffer.from([ 0x0, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x60 ])
   )
   uncompressStream.end()
 })
@@ -132,7 +133,7 @@ it('uncompress large String in small pieces', function () {
     var i = 0;
 
     while (i < chunk.length) {
-      uncompressStream.write(bufferFrom([ chunk[i] ]))
+      uncompressStream.write(Buffer.from([ chunk[i] ]))
       i++
     }
   })
@@ -148,7 +149,7 @@ it('uncompress large String in small pieces', function () {
 it('uncompress small Buffer across multiple chunks', function () {
   var uncompressStream = createUncompressStream()
     , data = []
-    , IDENTIFIER = bufferFrom([
+    , IDENTIFIER = Buffer.from([
       0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59
     ])
 
@@ -158,21 +159,21 @@ it('uncompress small Buffer across multiple chunks', function () {
   })
 
   uncompressStream.on('end', function () {
-    expect(Buffer.concat(data)).to.be.deep.equal(bufferFrom('beep boop'))
+    expect(Buffer.concat(data)).to.be.deep.equal(Buffer.from('beep boop'))
   })
 
   // identifier
   uncompressStream.write(IDENTIFIER)
   // "beep"
-  uncompressStream.write(bufferFrom([0x01, 0x08, 0x00, 0x00, 0xfb, 0x5e, 0xc9, 0x6e, 0x62, 0x65, 0x65, 0x70]))
+  uncompressStream.write(Buffer.from([0x01, 0x08, 0x00, 0x00, 0xfb, 0x5e, 0xc9, 0x6e, 0x62, 0x65, 0x65, 0x70]))
   // " boop"
-  uncompressStream.write(bufferFrom([0x01, 0x09, 0x00, 0x00, 0x5f, 0xae, 0xb4, 0x84, 0x20, 0x62, 0x6f, 0x6f, 0x70]))
+  uncompressStream.write(Buffer.from([0x01, 0x09, 0x00, 0x00, 0x5f, 0xae, 0xb4, 0x84, 0x20, 0x62, 0x6f, 0x6f, 0x70]))
   uncompressStream.end()
 })
 
-it.skip('uncompress large string across multiple chunks', function () {
+it('uncompress large string across multiple chunks', function () {
   var child1 = spawn('python', [ '-m', 'snappy', '-c' ])
-    , IDENTIFIER = bufferFrom([
+    , IDENTIFIER = Buffer.from([
         0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59
       ])
     , uncompressStream = createUncompressStream({ asBuffer: false })
@@ -212,9 +213,9 @@ it.skip('uncompress large string across multiple chunks', function () {
   child1.stdin.end()
 })
 
-it.skip('uncompress large string with padding chunks', function () {
+it('uncompress large string with padding chunks', function () {
   var child1 = spawn('python', [ '-m', 'snappy', '-c' ])
-    , IDENTIFIER = bufferFrom([
+    , IDENTIFIER = Buffer.from([
         0xff, 0x06, 0x00, 0x00, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59
       ])
     , uncompressStream = createUncompressStream({ asBuffer: false })

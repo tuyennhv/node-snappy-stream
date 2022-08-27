@@ -1,8 +1,9 @@
-var snappyStream = require('./index.js')
-  , compressStream = snappyStream.createCompressStream()
-  , uncompressStream = snappyStream.createUncompressStream({
-      asBuffer: false // optional option, asBuffer = false means that the stream emits strings, default: true
-    })
+import {createCompressStream, createUncompressStream} from './index.js'
+
+const compressStream = createCompressStream()
+const uncompressStream = createUncompressStream({
+  asBuffer: false // optional option, asBuffer = false means that the stream emits strings, default: true
+})
 
 compressStream.on('data', function (chunk) {
   console.log('Som data from the compressed stream', chunk)

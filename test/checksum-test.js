@@ -1,8 +1,12 @@
-var checksum = require("../lib/checksum");
-var fs = require("fs");
-var join = require("path").join;
-var expect = require('chai').expect;
-var bufferAlloc = require('buffer-alloc')
+import fs from 'fs'
+import {join} from 'path'
+import {expect} from 'chai'
+import {checksum} from '../lib/checksum.js'
+import path from 'path'
+import {fileURLToPath} from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 function bufferToArray(buffer) {
   var array = new Array(buffer.length);
@@ -12,10 +16,10 @@ function bufferToArray(buffer) {
   return array;
 }
 
-if ("UPDATE_EXPECTED" in process.env) {
+if ('UPDATE_EXPECTED' in process.env) {
   var expectedRows = [];
   for (var i = 0; i < 1000; ++i) {
-    var buffer = bufferAlloc(1);
+    var buffer = Buffer.alloc(1);
     buffer[0] = i;
 
     console.log(checksum(buffer));
@@ -24,18 +28,18 @@ if ("UPDATE_EXPECTED" in process.env) {
   }
 
   fs.writeFileSync(
-    join(__dirname, "checksum.expected"),
+    join(__dirname, 'checksum.expected'),
     JSON.stringify(expectedRows)
   );
 }
 
 var expectedRows = JSON.parse(
-  fs.readFileSync(join(__dirname, "checksum.expected"))
+  fs.readFileSync(join(__dirname, 'checksum.expected'))
 );
 
-it("Checksum", function () {
+it('Checksum', function () {
   expectedRows.forEach(function (expected, index) {
-    var buffer = bufferAlloc(1);
+    var buffer = Buffer.alloc(1);
     buffer[0] = index;
     var actual = bufferToArray(checksum(buffer));
     expect(actual).to.be.deep.equal(expected, 'Buffer created from ' + index)
